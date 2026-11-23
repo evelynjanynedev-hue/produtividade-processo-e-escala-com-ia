@@ -5,9 +5,11 @@ import { and, desc, eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import {
   aiProviders,
+  contentPieces,
   evidences,
   initiatives,
   knowledgeItems,
+  leads,
   learnings,
   milestones,
   processes,
@@ -272,4 +274,45 @@ export async function listKnowledge(workspaceId: string) {
     .leftJoin(initiatives, eq(initiatives.id, knowledgeItems.initiativeId))
     .where(eq(knowledgeItems.workspaceId, workspaceId))
     .orderBy(desc(knowledgeItems.updatedAt));
+}
+
+export async function getMarketingSnapshot(workspaceId: string) {
+  const leadsList = await db
+    .select()
+    .from(leads)
+    .where(eq(leads.workspaceId, workspaceId))
+    .orderBy(desc(leads.createdAt));
+
+  const contentList = await db
+    .select()
+    .from(contentPieces)
+    .where(eq(contentPieces.workspaceId, workspaceId))
+    .orderBy(desc(contentPieces.createdAt));
+
+  const leadsByStage: Record<string, typeof leadsList> = {};
+  for (const lead of leadsList) {
+    if (!leadsByStage[lead.stage]) leadsByStage[lead.stage] = [];
+    leadsByStage[lead.stage].push(lead);
+  }
+
+  const activeLeads = leadsList.filter((l) => l.stage !== "fechado" && l.stage !== "perdido").length;
+  const pipelineValue = leadsList
+    .filter((l) => l.stage !== "fechado" && l.stage !== "perdido")
+    .reduce((acc, l) => acc + (Number(l.value) || 0), 0);
+  const closedValue = leadsList
+    .filter((l) => l.stage === "fechado")
+    .reduce((acc, l) => acc + (Number(l.value) || 0), 0);
+  const publishedContent = contentList.filter((c) => c.status === "publicado").length;
+
+  return {
+    leadsByStage,
+    recentLeads: leadsList.slice(0, 8),
+    recentContent: contentList.slice(0, 8),
+    totals: {
+      activeLeads,
+      pipelineValue,
+      closedValue,
+      publishedContent,
+    },
+  };
 }

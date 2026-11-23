@@ -79,6 +79,33 @@ export const knowledgeCategoryEnum = pgEnum("app_knowledge_category", [
   "outro",
 ]);
 
+export const leadStageEnum = pgEnum("app_lead_stage", [
+  "novo",
+  "contatado",
+  "qualificado",
+  "proposta",
+  "negociacao",
+  "fechado",
+  "perdido",
+]);
+
+export const contentTypeEnum = pgEnum("app_content_type", [
+  "youtube",
+  "post",
+  "newsletter",
+  "podcast",
+  "live",
+  "outro",
+]);
+
+export const contentStatusEnum = pgEnum("app_content_status", [
+  "ideia",
+  "roteiro",
+  "gravado",
+  "editado",
+  "publicado",
+]);
+
 /* ══════════════════════════════════════════════════════════════════
    IDENTIDADE
    ══════════════════════════════════════════════════════════════════ */
@@ -330,6 +357,59 @@ export const aiProviders = pgTable(
 );
 
 /* ══════════════════════════════════════════════════════════════════
+   MARKETING & VENDAS — RECEITA PREVISÍVEL
+   ══════════════════════════════════════════════════════════════════ */
+
+export const leads = pgTable(
+  "leads",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    initiativeId: uuid("initiative_id").references(() => initiatives.id, { onDelete: "set null" }),
+    name: text("name").notNull(),
+    email: text("email").notNull().default(""),
+    phone: text("phone").notNull().default(""),
+    company: text("company").notNull().default(""),
+    stage: leadStageEnum("stage").notNull().default("novo"),
+    value: numeric("value", { precision: 14, scale: 2 }),
+    source: text("source").notNull().default(""),
+    notes: text("notes").notNull().default(""),
+    nextAction: text("next_action").notNull().default(""),
+    nextActionAt: timestamp("next_action_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("leads_workspace_idx").on(t.workspaceId, t.stage),
+    index("leads_next_action_idx").on(t.nextActionAt),
+  ],
+);
+
+export const contentPieces = pgTable(
+  "content_pieces",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    initiativeId: uuid("initiative_id").references(() => initiatives.id, { onDelete: "set null" }),
+    title: text("title").notNull(),
+    type: contentTypeEnum("type").notNull().default("youtube"),
+    status: contentStatusEnum("status").notNull().default("ideia"),
+    platform: text("platform").notNull().default(""),
+    url: text("url").notNull().default(""),
+    views: integer("views").notNull().default(0),
+    engagement: integer("engagement").notNull().default(0),
+    publishedAt: timestamp("published_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index("content_workspace_idx").on(t.workspaceId, t.status)],
+);
+
+/* ══════════════════════════════════════════════════════════════════
    RASTREABILIDADE
    ══════════════════════════════════════════════════════════════════ */
 
@@ -365,6 +445,8 @@ export const workspacesRelations = relations(workspaces, ({ many }) => ({
   processes: many(processes),
   knowledgeItems: many(knowledgeItems),
   aiProviders: many(aiProviders),
+  leads: many(leads),
+  contentPieces: many(contentPieces),
 }));
 
 export const membershipsRelations = relations(memberships, ({ one }) => ({
@@ -380,6 +462,8 @@ export const initiativesRelations = relations(initiatives, ({ one, many }) => ({
   results: many(results),
   learnings: many(learnings),
   knowledgeItems: many(knowledgeItems),
+  leads: many(leads),
+  contentPieces: many(contentPieces),
 }));
 
 export const milestonesRelations = relations(milestones, ({ one, many }) => ({
@@ -419,4 +503,14 @@ export const knowledgeItemsRelations = relations(knowledgeItems, ({ one }) => ({
 
 export const aiProvidersRelations = relations(aiProviders, ({ one }) => ({
   workspace: one(workspaces, { fields: [aiProviders.workspaceId], references: [workspaces.id] }),
+}));
+
+export const leadsRelations = relations(leads, ({ one }) => ({
+  workspace: one(workspaces, { fields: [leads.workspaceId], references: [workspaces.id] }),
+  initiative: one(initiatives, { fields: [leads.initiativeId], references: [initiatives.id] }),
+}));
+
+export const contentPiecesRelations = relations(contentPieces, ({ one }) => ({
+  workspace: one(workspaces, { fields: [contentPieces.workspaceId], references: [workspaces.id] }),
+  initiative: one(initiatives, { fields: [contentPieces.initiativeId], references: [initiatives.id] }),
 }));

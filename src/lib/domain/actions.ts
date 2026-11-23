@@ -9,9 +9,11 @@ import { db } from "@/lib/db";
 import {
   activityEvents,
   aiProviders,
+  contentPieces,
   evidences,
   initiatives,
   knowledgeItems,
+  leads,
   learnings,
   milestones,
   processes,
@@ -623,6 +625,32 @@ export async function addKnowledgeAction(formData: FormData): Promise<void> {
 
   await log(user.workspaceId, user.id, initiativeId || null, "conhecimento.adicionado", title);
   revalidatePath("/knowledge");
+}
+
+export async function addLeadAction(formData: FormData): Promise<void> {
+  const user = await requireUser();
+  const name = String(formData.get("name") ?? "").trim();
+  if (name.length < 2) return;
+
+  const stage = String(formData.get("stage") ?? "novo");
+  const validStage = ["novo", "contatado", "qualificado", "proposta", "negociacao", "fechado", "perdido"].includes(stage)
+    ? (stage as "novo" | "contatado" | "qualificado" | "proposta" | "negociacao" | "fechado" | "perdido")
+    : "novo";
+
+  await db.insert(leads).values({
+    workspaceId: user.workspaceId,
+    name,
+    email: String(formData.get("email") ?? "").trim(),
+    phone: String(formData.get("phone") ?? "").trim(),
+    company: String(formData.get("company") ?? "").trim(),
+    stage: validStage,
+    value: String(formData.get("value") ?? "").trim() || null,
+    source: String(formData.get("source") ?? "").trim(),
+    notes: String(formData.get("notes") ?? "").trim(),
+  });
+
+  await log(user.workspaceId, user.id, null, "lead.criado", name);
+  revalidatePath("/marketing");
 }
 
 export async function archiveInitiativeAction(formData: FormData): Promise<void> {
