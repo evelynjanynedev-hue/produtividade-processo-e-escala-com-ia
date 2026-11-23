@@ -40,6 +40,41 @@ Linha reta (objetivo claro → etapas → tarefas → execução → evidência 
 
 Cada intenção vira uma **linha reta** — não se perde na infinidade de possibilidades. O sistema elimina o que não gera valor e mantém apenas o caminho que leva a resultado concreto.
 
+## Princípio das boas perguntas
+
+> "A qualidade da sua vida é determinada pela qualidade das perguntas que você faz."
+
+O sistema não apenas responde perguntas — ele **ensina a perguntar melhor**. Com o apoio da IA, a pessoa desenvolve senso crítico, eleva seu nível de consciência e o da própria IA.
+
+### Como funciona
+
+1. **Pergunta bruta** → a pessoa escreve o que pensa (sem filtro, sem estrutura)
+2. **IA refina** → o sistema reformula, amplia e aprofunda a pergunta
+3. **Senso crítico** → a IA questiona de volta: "Você considerou X?", "E se o oposto fosse verdade?", "Qual evidência você tem?"
+4. **Elevação de consciência** → a pessoa percebe padrões que não via antes
+5. **Pergunta afiada** → uma pergunta clara, específica e acionável emerge
+
+### O ciclo
+
+```
+Pergunta vaga → IA aprofunda → Pessoa reflete → Senso crítico ativa → Pergunta afiada → Ação concreta
+```
+
+### Por que isso importa
+
+- **IA sem boas perguntas é apenas uma máquina de respostas.** Com boas perguntas, ela se torna uma parceira de pensamento.
+- **Pessoas que perguntam melhor decidem melhor.** A qualidade da decisão é proporcional à qualidade da pergunta.
+- **Senso crítico é músculo.** Quanto mais você pergunta com profundidade, mais forte ele fica.
+- **A IA também aprende.** Quando a pessoa pergunta bem, a IA responde melhor — elevando o nível de ambas.
+
+### Exemplos
+
+| Pergunta vaga | Pergunta afiada |
+|---|---|
+| "Como crescer meu negócio?" | "Qual é o gargalo que, se resolvido, dobraria minha receita em 90 dias — e qual evidência eu tenho disso?" |
+| "O que devo fazer?" | "Das 3 opções que tenho, qual gera mais evidência de resultado em 7 dias?" |
+| "Estou no caminho certo?" | "O que eu esperava que acontecesse e o que realmente aconteceu — e o que essa diferença me ensina?" |
+
 ## O problema que resolve
 
 A maioria das pessoas e das empresas acumula:
@@ -167,6 +202,7 @@ Os agentes de IA podem:
 - Sugerir próximos passos
 - Documentar processos
 - Organizar o segundo cérebro
+- Refinar perguntas e elevar senso crítico
 
 Configure em `/settings` (Agentes IA).
 
@@ -347,6 +383,7 @@ Quando o produto crescer:
 - [ ] Dashboard de resultados em tempo real com dados
 - [ ] Busca semântica no segundo cérebro (embeddings)
 - [ ] Agentes autônomos que executam tarefas sem intervenção humana
+- [ ] Módulo de perguntas inteligentes (IA refina perguntas, eleva senso crítico)
 
 ## Licença
 
