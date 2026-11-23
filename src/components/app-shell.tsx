@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Boxes, LayoutDashboard, LogOut, Target, Workflow } from "lucide-react";
+import { ArrowUpRight, Boxes, Brain, LayoutDashboard, LogOut, Settings, Target, Workflow } from "lucide-react";
 
 import { logoutAction } from "@/app/actions/auth";
 import type { SessionUser } from "@/lib/auth/session";
@@ -8,7 +8,9 @@ import { cn, initials } from "@/lib/ui";
 const NAV = [
   { href: "/", label: "Painel", icon: LayoutDashboard },
   { href: "/initiatives", label: "Intenções", icon: Target },
+  { href: "/knowledge", label: "Segundo cérebro", icon: Brain },
   { href: "/processes", label: "Processos", icon: Workflow },
+  { href: "/settings", label: "Agentes IA", icon: Settings },
 ];
 
 export function AppShell({

@@ -60,6 +60,25 @@ export const processStatusEnum = pgEnum("app_process_status", [
   "escalando",
 ]);
 
+export const aiProviderEnum = pgEnum("app_ai_provider", [
+  "groq",
+  "openai",
+  "anthropic",
+  "google",
+  "ollama",
+  "custom",
+]);
+
+export const knowledgeCategoryEnum = pgEnum("app_knowledge_category", [
+  "insight",
+  "referencia",
+  "decisao",
+  "contato",
+  "recurso",
+  "ideia",
+  "outro",
+]);
+
 /* ══════════════════════════════════════════════════════════════════
    IDENTIDADE
    ══════════════════════════════════════════════════════════════════ */
@@ -262,6 +281,55 @@ export const processes = pgTable(
 );
 
 /* ══════════════════════════════════════════════════════════════════
+   SEGUNDO CÉREBRO — BASE DE CONHECIMENTO
+   ══════════════════════════════════════════════════════════════════ */
+
+export const knowledgeItems = pgTable(
+  "knowledge_items",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    initiativeId: uuid("initiative_id").references(() => initiatives.id, { onDelete: "set null" }),
+    title: text("title").notNull(),
+    content: text("content").notNull(),
+    category: knowledgeCategoryEnum("category").notNull().default("insight"),
+    tags: jsonb("tags").$type<string[]>().notNull().default([]),
+    source: text("source").notNull().default(""),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("knowledge_workspace_idx").on(t.workspaceId, t.category),
+    index("knowledge_initiative_idx").on(t.initiativeId),
+  ],
+);
+
+/* ══════════════════════════════════════════════════════════════════
+   CONFIGURAÇÃO DE IA — AGENTES EXECUTORES
+   ══════════════════════════════════════════════════════════════════ */
+
+export const aiProviders = pgTable(
+  "ai_providers",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    provider: aiProviderEnum("provider").notNull(),
+    name: text("name").notNull(),
+    apiKey: text("api_key").notNull(),
+    model: text("model").notNull().default(""),
+    baseUrl: text("base_url").notNull().default(""),
+    enabled: boolean("enabled").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index("ai_providers_workspace_idx").on(t.workspaceId, t.enabled)],
+);
+
+/* ══════════════════════════════════════════════════════════════════
    RASTREABILIDADE
    ══════════════════════════════════════════════════════════════════ */
 
@@ -283,7 +351,7 @@ export const activityEvents = pgTable(
 );
 
 /* ══════════════════════════════════════════════════════════════════
-   RELAÇÕES (para queries tipadas com `db.query`)
+   RELAÇÕES
    ══════════════════════════════════════════════════════════════════ */
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -295,6 +363,8 @@ export const workspacesRelations = relations(workspaces, ({ many }) => ({
   memberships: many(memberships),
   initiatives: many(initiatives),
   processes: many(processes),
+  knowledgeItems: many(knowledgeItems),
+  aiProviders: many(aiProviders),
 }));
 
 export const membershipsRelations = relations(memberships, ({ one }) => ({
@@ -309,6 +379,7 @@ export const initiativesRelations = relations(initiatives, ({ one, many }) => ({
   evidences: many(evidences),
   results: many(results),
   learnings: many(learnings),
+  knowledgeItems: many(knowledgeItems),
 }));
 
 export const milestonesRelations = relations(milestones, ({ one, many }) => ({
@@ -339,4 +410,13 @@ export const learningsRelations = relations(learnings, ({ one }) => ({
 export const processesRelations = relations(processes, ({ one }) => ({
   workspace: one(workspaces, { fields: [processes.workspaceId], references: [workspaces.id] }),
   initiative: one(initiatives, { fields: [processes.initiativeId], references: [initiatives.id] }),
+}));
+
+export const knowledgeItemsRelations = relations(knowledgeItems, ({ one }) => ({
+  workspace: one(workspaces, { fields: [knowledgeItems.workspaceId], references: [workspaces.id] }),
+  initiative: one(initiatives, { fields: [knowledgeItems.initiativeId], references: [initiatives.id] }),
+}));
+
+export const aiProvidersRelations = relations(aiProviders, ({ one }) => ({
+  workspace: one(workspaces, { fields: [aiProviders.workspaceId], references: [workspaces.id] }),
 }));

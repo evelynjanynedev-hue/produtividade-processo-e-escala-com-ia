@@ -4,8 +4,10 @@ import { and, desc, eq, sql } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import {
+  aiProviders,
   evidences,
   initiatives,
+  knowledgeItems,
   learnings,
   milestones,
   processes,
@@ -237,4 +239,37 @@ export async function listProcesses(workspaceId: string) {
     .leftJoin(initiatives, eq(initiatives.id, processes.initiativeId))
     .where(eq(processes.workspaceId, workspaceId))
     .orderBy(desc(processes.updatedAt));
+}
+
+export async function listAiProviders(workspaceId: string) {
+  return db
+    .select({
+      id: aiProviders.id,
+      provider: aiProviders.provider,
+      name: aiProviders.name,
+      model: aiProviders.model,
+      enabled: aiProviders.enabled,
+    })
+    .from(aiProviders)
+    .where(eq(aiProviders.workspaceId, workspaceId))
+    .orderBy(desc(aiProviders.createdAt));
+}
+
+export async function listKnowledge(workspaceId: string) {
+  return db
+    .select({
+      id: knowledgeItems.id,
+      title: knowledgeItems.title,
+      content: knowledgeItems.content,
+      category: knowledgeItems.category,
+      tags: knowledgeItems.tags,
+      source: knowledgeItems.source,
+      initiativeId: knowledgeItems.initiativeId,
+      updatedAt: knowledgeItems.updatedAt,
+      initiativeTitle: initiatives.title,
+    })
+    .from(knowledgeItems)
+    .leftJoin(initiatives, eq(initiatives.id, knowledgeItems.initiativeId))
+    .where(eq(knowledgeItems.workspaceId, workspaceId))
+    .orderBy(desc(knowledgeItems.updatedAt));
 }

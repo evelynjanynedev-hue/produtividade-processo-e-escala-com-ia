@@ -8,8 +8,10 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import {
   activityEvents,
+  aiProviders,
   evidences,
   initiatives,
+  knowledgeItems,
   learnings,
   milestones,
   processes,
@@ -560,6 +562,67 @@ export async function setProcessStatusAction(formData: FormData): Promise<void> 
 
   await log(user.workspaceId, user.id, null, `processo.${status}`, process.name);
   revalidatePath("/processes");
+}
+
+export async function addAiProviderAction(formData: FormData): Promise<void> {
+  const user = await requireUser();
+  const provider = String(formData.get("provider") ?? "groq");
+  const name = String(formData.get("name") ?? "").trim();
+  const apiKey = String(formData.get("apiKey") ?? "").trim();
+  const model = String(formData.get("model") ?? "").trim();
+  const baseUrl = String(formData.get("baseUrl") ?? "").trim();
+
+  if (name.length < 2 || apiKey.length < 5) return;
+
+  const validProvider = ["groq", "openai", "anthropic", "google", "ollama", "custom"].includes(provider)
+    ? (provider as "groq" | "openai" | "anthropic" | "google" | "ollama" | "custom")
+    : "custom";
+
+  await db.insert(aiProviders).values({
+    workspaceId: user.workspaceId,
+    provider: validProvider,
+    name,
+    apiKey,
+    model,
+    baseUrl,
+    enabled: true,
+  });
+
+  await log(user.workspaceId, user.id, null, "ia.provedor.adicionado", name);
+  revalidatePath("/settings");
+}
+
+export async function addKnowledgeAction(formData: FormData): Promise<void> {
+  const user = await requireUser();
+  const title = String(formData.get("title") ?? "").trim();
+  const content = String(formData.get("content") ?? "").trim();
+  const category = String(formData.get("category") ?? "insight");
+  const tagsRaw = String(formData.get("tags") ?? "").trim();
+  const source = String(formData.get("source") ?? "").trim();
+  const initiativeId = String(formData.get("initiativeId") ?? "").trim();
+
+  if (title.length < 3 || content.length < 5) return;
+
+  const tags = tagsRaw
+    ? tagsRaw.split(",").map((t) => t.trim()).filter(Boolean).slice(0, 10)
+    : [];
+
+  const validCategory = ["insight", "referencia", "decisao", "contato", "recurso", "ideia", "outro"].includes(category)
+    ? (category as "insight" | "referencia" | "decisao" | "contato" | "recurso" | "ideia" | "outro")
+    : "insight";
+
+  await db.insert(knowledgeItems).values({
+    workspaceId: user.workspaceId,
+    initiativeId: initiativeId || null,
+    title,
+    content,
+    category: validCategory,
+    tags,
+    source,
+  });
+
+  await log(user.workspaceId, user.id, initiativeId || null, "conhecimento.adicionado", title);
+  revalidatePath("/knowledge");
 }
 
 export async function archiveInitiativeAction(formData: FormData): Promise<void> {

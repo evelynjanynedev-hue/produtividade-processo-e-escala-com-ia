@@ -25,3 +25,4 @@ drizzle/meta/_journal.json.bak
 *.log
 npm-debug.log*
 coverage/
+.vercel

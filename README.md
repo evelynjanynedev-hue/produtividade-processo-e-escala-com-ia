@@ -26,6 +26,20 @@ Este sistema é construído para isso:
 - **Execução por IA:** agentes transformam intenção em ação sem você precisar pensar em cada passo
 - **Resultado visível:** dados reais na tela, não promessas
 
+## Teoria do caos → Linha reta
+
+O sistema usa o princípio do **efeito borboleta**: uma pequena intenção, quando processada corretamente, gera uma cadeia de eventos que transforma o caos em ordem.
+
+```
+Caos (ideias soltas, informações dispersas, devaneios)
+   ↓
+Intenção (uma frase, um desejo, um problema)
+   ↓
+Linha reta (objetivo claro → etapas → tarefas → execução → evidência → resultado)
+```
+
+Cada intenção vira uma **linha reta** — não se perde na infinidade de possibilidades. O sistema elimina o que não gera valor e mantém apenas o caminho que leva a resultado concreto.
+
 ## O problema que resolve
 
 A maioria das pessoas e das empresas acumula:
@@ -109,20 +123,6 @@ PROCESSO VALIDADO
 ESCALA
 ```
 
-O sistema mostra claramente:
-
-- onde você está
-- para onde está indo
-- o que precisa ser feito agora
-- o que está bloqueado
-- o que já foi validado
-- o que ainda é hipótese
-- o que está funcionando
-- o que precisa ser descartado
-- o que pode ser repetido
-- o que pode ser automatizado
-- o que pode ser escalado
-
 ## Framework: Direção → Estrutura → Processo → Execução → Escala
 
 O sistema opera em 5 camadas:
@@ -134,6 +134,41 @@ O sistema opera em 5 camadas:
 5. **Escala** — como crescer (repetir + otimizar + automatizar + delegar + aumentar volume)
 
 Cada camada alimenta a próxima. Nenhuma camada existe sozinha.
+
+## Segundo cérebro
+
+O sistema possui uma **base de conhecimento** (segundo cérebro) que armazena:
+
+- Insights e aprendizados
+- Decisões tomadas e seus contextos
+- Referências e recursos
+- Contatos e informações relevantes
+- Ideias em desenvolvimento
+
+Cada item pode ser vinculado a um projeto (iniciativa), categorizado e tagueado. O segundo cérebro alimenta os agentes de IA com contexto para tomar decisões melhores.
+
+## Agentes de IA
+
+O sistema suporta configuração de provedores de IA:
+
+| Provedor | Tipo | Exemplo de modelo |
+|---|---|---|
+| **Groq** | Cloud (ultra-rápido) | llama-3.3-70b-versatile |
+| **OpenAI** | Cloud | gpt-4o |
+| **Anthropic** | Cloud | claude-sonnet-4 |
+| **Google** | Cloud | gemini-2.0-flash |
+| **Ollama** | Local (privado) | llama3.2 |
+| **Custom** | Qualquer API compatível | — |
+
+Os agentes de IA podem:
+- Estruturar intenções em ação
+- Gerar tarefas e etapas
+- Analisar evidências e resultados
+- Sugerir próximos passos
+- Documentar processos
+- Organizar o segundo cérebro
+
+Configure em `/settings` (Agentes IA).
 
 ## Inteligência do sistema
 
@@ -192,7 +227,9 @@ src/
 │   ├── page.tsx                  # painel
 │   ├── login/ cadastro/          # autenticação
 │   ├── initiatives/              # portfólio + detalhe
+│   ├── knowledge/                # segundo cérebro
 │   ├── processes/                # biblioteca de processos
+│   ├── settings/                 # agentes de IA
 │   └── api/health/               # health check
 ├── components/
 │   ├── app-shell.tsx             # sidebar + nav
@@ -224,6 +261,8 @@ src/
 | `results` | métricas medidas (com meta) |
 | `learnings` | aprendizados (aberto/provado/descartado) |
 | `processes` | processos padronizados (rascunho/validado/escalando) |
+| `knowledge_items` | segundo cérebro (insights, decisões, referências) |
+| `ai_providers` | configuração de APIs de IA (Groq, OpenAI, etc.) |
 | `activity_events` | trilha de auditoria |
 
 ## Rodando localmente
@@ -279,6 +318,7 @@ npm run db:studio    # Drizzle Studio
 - Rate limit de login (10/10 min).
 - Headers de segurança em todas as rotas.
 - Multi-tenant: toda query filtrada por `workspaceId`.
+- API keys de IA armazenadas no banco (criptografadas em produção).
 
 ## Caminho de escala
 
@@ -291,19 +331,22 @@ Quando o produto crescer:
 5. **Multi-tenant forte:** RLS no Postgres por `workspace_id`.
 6. **Observabilidade:** Sentry + OpenTelemetry.
 7. **Escala horizontal:** container stateless atrás de load balancer.
+8. **Agentes de IA:** execução paralela com filas e workers dedicados.
 
 ## Roadmap
 
 - [ ] Visualização em grafo da cadeia (D3/Cytoscape)
-- [ ] Intake com LLM (OpenAI/Anthropic) via `IntakeEngine`
+- [ ] Intake com LLM (OpenAI/Anthropic/Groq) via `IntakeEngine`
+- [ ] Execução automática de tarefas por agentes de IA
 - [ ] Upload de arquivos de evidência (S3)
 - [ ] Notificações de bloqueios
 - [ ] Exportação de processos (PDF/Markdown)
 - [ ] API pública (REST/tRPC)
 - [ ] App mobile (React Native)
 - [ ] Integrações (GitHub, Linear, Notion)
-- [ ] Agentes de IA para execução automática de tarefas
 - [ ] Dashboard de resultados em tempo real com dados
+- [ ] Busca semântica no segundo cérebro (embeddings)
+- [ ] Agentes autônomos que executam tarefas sem intervenção humana
 
 ## Licença
 
