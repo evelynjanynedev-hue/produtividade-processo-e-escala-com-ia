@@ -5,6 +5,27 @@
 Um sistema operacional pessoal que transforma **intenção em clareza, ação em evidência e evidência em processo escalável**.
 Não é um lugar para guardar informação — é um lugar para transformar informação em realidade.
 
+## A visão
+
+O sistema não escolhe uma única identidade. Ele encontra a estrutura que permite que todas as dimensões trabalhem juntas:
+
+```
+Tecnologia + Negócios + Criatividade + Conhecimento + Pessoas + Expressão
+```
+
+Essas dimensões não competem — se complementam. A tecnologia executa. Os negócios direcionam. A criatividade inova. O conhecimento acumula. As pessoas conectam. A expressão comunica. O sistema é a cola que faz tudo funcionar como um.
+
+## O que as pessoas realmente querem
+
+Pessoas não querem pensar. Elas querem **resultados rápidos, práticos e executáveis**. Querem que agentes de IA façam o trabalho pesado e entreguem o resultado pronto. Querem ver o resultado prático, com dados, na tela, agora.
+
+Este sistema é construído para isso:
+
+- **Entrada mínima:** escreva uma intenção em uma frase
+- **Saída máxima:** estrutura completa com etapas, tarefas, evidências e métricas
+- **Execução por IA:** agentes transformam intenção em ação sem você precisar pensar em cada passo
+- **Resultado visível:** dados reais na tela, não promessas
+
 ## O problema que resolve
 
 A maioria das pessoas e das empresas acumula:
@@ -62,9 +83,9 @@ O sistema sempre pergunta:
 > **"Qual é a prova de que isso aconteceu?"**
 > **"Qual resultado isso gerou?"**
 
-## Visualização da cadeia
+## Mapa visual de execução
 
-Cada projeto pode ser visualizado como:
+Cada projeto é visualizado como um fluxo completo:
 
 ```
 OBJETIVO
@@ -101,6 +122,18 @@ O sistema mostra claramente:
 - o que pode ser repetido
 - o que pode ser automatizado
 - o que pode ser escalado
+
+## Framework: Direção → Estrutura → Processo → Execução → Escala
+
+O sistema opera em 5 camadas:
+
+1. **Direção** — o que você quer que exista (intenção + objetivo + resultado esperado)
+2. **Estrutura** — como organizar para chegar lá (etapas + tarefas + prioridades + dependências)
+3. **Processo** — como repetir sem depender de sorte (documentação + padronização + validação)
+4. **Execução** — o que sai do papel (ação + evidência + resultado + aprendizado)
+5. **Escala** — como crescer (repetir + otimizar + automatizar + delegar + aumentar volume)
+
+Cada camada alimenta a próxima. Nenhuma camada existe sozinha.
 
 ## Inteligência do sistema
 
@@ -269,6 +302,8 @@ Quando o produto crescer:
 - [ ] API pública (REST/tRPC)
 - [ ] App mobile (React Native)
 - [ ] Integrações (GitHub, Linear, Notion)
+- [ ] Agentes de IA para execução automática de tarefas
+- [ ] Dashboard de resultados em tempo real com dados
 
 ## Licença
 
