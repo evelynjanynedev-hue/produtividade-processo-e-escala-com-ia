@@ -32,7 +32,7 @@ export default async function DashboardPage({
           <div className="eyebrow">Painel · {today}</div>
           <h1 className="mt-2 text-[34px] leading-[1.05] sm:text-[40px]">Onde você está agora.</h1>
           <p className="mt-2 max-w-[52ch] text-sm leading-relaxed text-muted">
-            Tudo aqui é medido por prova: o que saiu do papel, o que gerou número e o que já pode ser repetido.
+            Negócios com Direção, Estrutura, Processos e Escala. Crescimento sem sobrecarga: tudo aqui é medido por prova.
           </p>
         </div>
         <a href="#nova" className="btn btn-primary">
@@ -107,6 +107,7 @@ export default async function DashboardPage({
               { icon: Gauge, label: "Ações abertas", value: snapshot.totals.tasksOpen },
               { icon: FileCheck2, label: "Evidências (7 dias)", value: snapshot.totals.evidencesThisWeek },
               { icon: Workflow, label: "Processos validados", value: snapshot.totals.validatedProcesses },
+              { icon: CheckCircle2, label: "Taxa de conversão", value: `${snapshot.totals.tasksDone > 0 ? Math.round((snapshot.totals.results / snapshot.totals.tasksDone) * 100) : 0}%` },
             ].map((item) => {
               const Icon = item.icon;
               return (

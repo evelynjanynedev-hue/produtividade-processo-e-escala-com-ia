@@ -162,6 +162,7 @@ export async function getWorkspaceSnapshot(workspaceId: string) {
       results: measuredResults,
       validatedProcesses,
       tasksOpen: active.reduce((acc, i) => acc + (i.tasksTotal - i.tasksDone), 0),
+      tasksDone: all.reduce((acc, i) => acc + i.tasksDone, 0),
     },
   };
 }

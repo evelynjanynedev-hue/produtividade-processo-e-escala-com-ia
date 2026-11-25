@@ -42,6 +42,38 @@ const MILESTONE_TEMPLATES = {
     { title: "Entregar e medir", tasks: ["Entregar o primeiro resultado", "Medir satisfação e prazo"] },
     { title: "Documentar e escalar", tasks: ["Documentar o processo em 6 passos", "Repetir com o próximo cliente"] },
   ],
+  marketing: [
+    { title: "Definir posicionamento", tasks: ["Escrever a promessa em uma frase", "Definir para quem é"] },
+    { title: "Criar conteúdo", tasks: ["Publicar 3 peças na semana", "Medir salvamentos e alcance"] },
+    { title: "Gerar leads", tasks: ["Criar isca digital", "Capturar 20 contatos qualificados"] },
+    { title: "Nutrir", tasks: ["Enviar 1 mensagem útil por semana", "Registrar respostas"] },
+    { title: "Converter", tasks: ["Realizar 5 conversas de venda", "Fechar o primeiro cliente"] },
+    { title: "Medir e otimizar", tasks: ["Calcular CAC e conversão", "Dobrar o que converteu"] },
+  ],
+  vendas: [
+    { title: "Mapear o funil", tasks: ["Listar as etapas do funil", "Definir métrica por etapa"] },
+    { title: "Prospectar", tasks: ["Listar 30 contatos ideais", "Enviar 15 abordagens"] },
+    { title: "Qualificar", tasks: ["Realizar 8 conversas", "Registrar dores e objeções"] },
+    { title: "Apresentar", tasks: ["Fazer 5 apresentações", "Enviar proposta com prazo"] },
+    { title: "Fechar", tasks: ["Fechar 2 clientes", "Registrar motivo de cada fechamento"] },
+    { title: "Documentar", tasks: ["Escrever o script vencedor", "Repetir com o próximo lote"] },
+  ],
+  tecnologia: [
+    { title: "Entender o problema", tasks: ["Mapear 5 usuários reais", "Escrever o problema sem solução"] },
+    { title: "Definir escopo mínimo", tasks: ["Cortar tudo que não é essencial", "Escrever a versão 0.1"] },
+    { title: "Construir", tasks: ["Entregar o fluxo principal", "Colocar em uso com 1 pessoa"] },
+    { title: "Medir uso", tasks: ["Registrar primeira sessão real", "Coletar feedback"] },
+    { title: "Iterar", tasks: ["Corrigir o maior atrito", "Publicar v0.2"] },
+    { title: "Escalar", tasks: ["Documentar o processo de entrega", "Automatizar o deploy"] },
+  ],
+  ia: [
+    { title: "Mapear o processo", tasks: ["Listar tarefas repetitivas", "Identificar onde a IA ajuda"] },
+    { title: "Escolher ferramenta", tasks: ["Testar 2 provedores", "Definir o modelo"] },
+    { title: "Prototipar", tasks: ["Criar o primeiro prompt", "Rodar com dados reais"] },
+    { title: "Medir resultado", tasks: ["Comparar tempo antes/depois", "Registrar economia"] },
+    { title: "Padronizar", tasks: ["Documentar o prompt vencedor", "Criar checklist de uso"] },
+    { title: "Escalar", tasks: ["Treinar a equipe", "Automatizar o fluxo"] },
+  ],
   conteudo: [
     { title: "Definir tese e público", tasks: ["Escrever a tese em uma frase", "Definir para quem é"] },
     { title: "Criar pauta", tasks: ["Listar 10 ideias de conteúdo"] },
@@ -72,14 +104,23 @@ type TemplateKey = keyof typeof MILESTONE_TEMPLATES;
 
 function detectTemplate(text: string): TemplateKey {
   const t = text.toLowerCase();
-  if (/(empresa|neg[óo]cio|jur[íi]dic|cliente|vender|venda|servi[çc]o|consultoria)/.test(t)) {
-    return "negocio";
-  }
-  if (/(conte[úu]do|post|instagram|marketing|audiência|audiencia|p[úu]blico)/.test(t)) {
-    return "conteudo";
+  if (/(intelig[êe]ncia artificial|\bia\b|llm|gpt|claude|gemini|automa[çc][ãa]o)/.test(t)) {
+    return "ia";
   }
   if (/(app|produto|sistema|plataforma|software|ferramenta)/.test(t)) {
     return "produto";
+  }
+  if (/(tecnologia|tech|dev|c[óo]digo|api|backend|frontend)/.test(t)) {
+    return "tecnologia";
+  }
+  if (/(vender|venda|funil|prospec[çc][ãa]o|fechar cliente)/.test(t)) {
+    return "vendas";
+  }
+  if (/(marketing|conte[úu]do|post|instagram|audi[êe]ncia|p[úu]blico|lead)/.test(t)) {
+    return "marketing";
+  }
+  if (/(empresa|neg[óo]cio|jur[íi]dic|cliente|servi[çc]o|consultoria)/.test(t)) {
+    return "negocio";
   }
   return "pessoal";
 }
