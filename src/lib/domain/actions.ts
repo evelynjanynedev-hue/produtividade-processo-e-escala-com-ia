@@ -609,8 +609,8 @@ export async function addKnowledgeAction(formData: FormData): Promise<void> {
     ? tagsRaw.split(",").map((t) => t.trim()).filter(Boolean).slice(0, 10)
     : [];
 
-  const validCategory = ["insight", "referencia", "decisao", "contato", "recurso", "ideia", "outro"].includes(category)
-    ? (category as "insight" | "referencia" | "decisao" | "contato" | "recurso" | "ideia" | "outro")
+  const validCategory = ["insight", "referencia", "decisao", "contato", "recurso", "ideia", "documentacao", "processo", "acao_ia", "outro"].includes(category)
+    ? (category as "insight" | "referencia" | "decisao" | "contato" | "recurso" | "ideia" | "documentacao" | "processo" | "acao_ia" | "outro")
     : "insight";
 
   await db.insert(knowledgeItems).values({
@@ -625,6 +625,7 @@ export async function addKnowledgeAction(formData: FormData): Promise<void> {
 
   await log(user.workspaceId, user.id, initiativeId || null, "conhecimento.adicionado", title);
   revalidatePath("/knowledge");
+  revalidatePath("/documentacao");
 }
 
 export async function addLeadAction(formData: FormData): Promise<void> {

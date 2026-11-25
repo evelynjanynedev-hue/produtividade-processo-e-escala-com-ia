@@ -18,7 +18,7 @@ export type DraftMilestone = {
 };
 
 export type IntakeSignal = {
-  kind: "objetivo" | "resultado" | "prazo" | "público" | "tipo";
+  kind: "objetivo" | "resultado" | "prazo" | "público" | "tipo" | "dimensão";
   value: string;
 };
 
@@ -160,6 +160,20 @@ function extractAudience(text: string): string | null {
   return match[1].trim();
 }
 
+function detectDimension(text: string): string {
+  const t = text.toLowerCase();
+  if (/(sentir|perceber|emo[çc][ãa]o|mentalidade|autoconhecimento|eu |minha vida|sobrecarga|equil[íi]brio)/.test(t)) {
+    return "EU — Perceber → Elaborar → Integrar";
+  }
+  if (/(neg[óo]cio|empresa|cliente|venda|marketing|processo|execu[çc][ãa]o|produto|escala|dire[çc][ãa]o|estrutura)/.test(t)) {
+    return "FAZER — Direção → Estrutura → Execução";
+  }
+  if (/(comunidade|pessoas|contribuir|conectar|compartilhar|impacto|valor|mundo|ecossistema)/.test(t)) {
+    return "MUNDO — Conectar → Criar → Contribuir";
+  }
+  return "EU — Perceber → Elaborar → Integrar";
+}
+
 export const draftFromIntent: IntakeEngine = (rawIntent) => {
   const intent = rawIntent.trim();
   const templateKey = detectTemplate(intent);
@@ -173,10 +187,12 @@ export const draftFromIntent: IntakeEngine = (rawIntent) => {
   const expectedResult =
     concreteResult ?? (deadline ? `Primeiro resultado observável em ${deadline}` : "Primeiro resultado observável em 30 dias");
 
+  const dimension = detectDimension(intent);
   const signals: IntakeSignal[] = [
     { kind: "objetivo", value: objective.length > 120 ? `${objective.slice(0, 117)}…` : objective },
     { kind: "resultado", value: expectedResult },
     { kind: "tipo", value: templateKey },
+    { kind: "dimensão", value: dimension },
   ];
   if (deadline) signals.push({ kind: "prazo", value: deadline });
   if (audience) signals.push({ kind: "público", value: audience });

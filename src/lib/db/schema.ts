@@ -76,6 +76,9 @@ export const knowledgeCategoryEnum = pgEnum("app_knowledge_category", [
   "contato",
   "recurso",
   "ideia",
+  "documentacao",
+  "processo",
+  "acao_ia",
   "outro",
 ]);
 

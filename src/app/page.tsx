@@ -31,8 +31,8 @@ export default async function DashboardPage({
         <div>
           <div className="eyebrow">Painel · {today}</div>
           <h1 className="mt-2 text-[34px] leading-[1.05] sm:text-[40px]">Onde você está agora.</h1>
-          <p className="mt-2 max-w-[52ch] text-sm leading-relaxed text-muted">
-            Negócios com Direção, Estrutura, Processos e Escala. Crescimento sem sobrecarga: tudo aqui é medido por prova.
+          <p className="mt-2 max-w-[58ch] text-sm leading-relaxed text-muted">
+            Conectar → Criar → Contribuir. Três dimensões: EU (Perceber → Elaborar → Integrar), FAZER (Direção → Estrutura → Execução), MUNDO (Conectar → Criar → Contribuir). Crescimento sem sobrecarga: tudo aqui é medido por prova.
           </p>
         </div>
         <a href="#nova" className="btn btn-primary">
