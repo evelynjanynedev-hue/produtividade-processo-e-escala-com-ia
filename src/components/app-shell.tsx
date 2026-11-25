@@ -37,7 +37,7 @@ export function AppShell({
           </div>
           <div className="mt-3 font-serif text-[26px] leading-none">Execução.</div>
           <div className="mt-1.5 text-[11px] uppercase tracking-[0.16em] text-muted">
-            intenção → escala
+            conectar → criar → contribuir
           </div>
         </Link>
 
@@ -67,6 +67,15 @@ export function AppShell({
           <div className="eyebrow mb-1.5">Regra de realidade</div>
           <p className="text-[12px] leading-relaxed text-muted">
             Ideia não é resultado. Plano não é execução. Só avança com prova.
+          </p>
+          <p className="mt-2 text-[12px] leading-relaxed text-muted">
+            Pergunta-chave: <span className="font-medium text-ink">“Estou deixando passar alguma coisa que eu não estou enxergando?”</span>
+          </p>
+          <p className="mt-2 text-[12px] leading-relaxed text-muted">
+            Confiança não vem de afirmações. Vem de evidências vividas de que você consegue se sustentar.
+          </p>
+          <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink">
+            Tudo deve ter limite e ordem.
           </p>
         </div>
 
