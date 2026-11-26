@@ -77,6 +77,9 @@ export function AppShell({
           <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink">
             Tudo deve ter limite e ordem.
           </p>
+          <p className="mt-2 text-[12px] leading-relaxed text-muted">
+            Princípio de apresentação: use teoria da mente e imagens visualmente claras para gerar familiaridade e evitar sobrecarga mental. Objetivo simples, fácil de compreender para qualquer nível de consciência.
+          </p>
         </div>
 
         <div className="mt-auto pt-6">
