@@ -92,6 +92,7 @@ export async function createInitiativeAction(formData: FormData): Promise<void> 
         objective: draft.objective,
         expectedResult: draft.expectedResult,
         vision: draft.vision,
+        dimension: draft.dimension,
         stage: 2,
         priority: parsed.data.priority,
         dueAt: Number.isNaN(dueAt?.getTime() ?? NaN) ? null : dueAt,

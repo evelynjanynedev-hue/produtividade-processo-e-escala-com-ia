@@ -27,6 +27,15 @@ export const initiativeStatusEnum = pgEnum("app_initiative_status", [
 
 export const priorityEnum = pgEnum("app_priority", ["baixa", "media", "alta"]);
 
+export const dimensionEnum = pgEnum("app_dimension", [
+  "tecnologia",
+  "negocios",
+  "criatividade",
+  "conhecimento",
+  "pessoas",
+  "expressao",
+]);
+
 export const taskStatusEnum = pgEnum("app_task_status", [
   "a_fazer",
   "fazendo",
@@ -192,6 +201,7 @@ export const initiatives = pgTable(
     stage: integer("stage").notNull().default(0),
     status: initiativeStatusEnum("status").notNull().default("ativa"),
     priority: priorityEnum("priority").notNull().default("media"),
+    dimension: dimensionEnum("dimension").notNull().default("negocios"),
     dueAt: timestamp("due_at", { withTimezone: true }),
     createdBy: uuid("created_by").references(() => users.id, { onDelete: "set null" }),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),

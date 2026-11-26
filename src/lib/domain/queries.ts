@@ -26,6 +26,7 @@ export type InitiativeSummary = {
   stage: number;
   status: "ativa" | "pausada" | "arquivada";
   priority: "baixa" | "media" | "alta";
+  dimension: "tecnologia" | "negocios" | "criatividade" | "conhecimento" | "pessoas" | "expressao";
   dueAt: Date | null;
   updatedAt: Date;
   tasksTotal: number;
@@ -63,6 +64,7 @@ export async function listInitiatives(workspaceId: string): Promise<InitiativeSu
       stage: initiatives.stage,
       status: initiatives.status,
       priority: initiatives.priority,
+      dimension: initiatives.dimension,
       dueAt: initiatives.dueAt,
       updatedAt: initiatives.updatedAt,
       ...countsSelect,

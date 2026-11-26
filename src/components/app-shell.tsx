@@ -10,6 +10,7 @@ const NAV = [
   { href: "/initiatives", label: "Intenções", icon: Target },
   { href: "/knowledge", label: "Segundo cérebro", icon: Brain },
   { href: "/documentacao", label: "Documentação", icon: FileText },
+  { href: "/dimensoes", label: "Dimensões", icon: Boxes },
   { href: "/marketing", label: "Marketing & Vendas", icon: DollarSign },
   { href: "/processes", label: "Processos", icon: Workflow },
   { href: "/settings", label: "Agentes IA", icon: Settings },

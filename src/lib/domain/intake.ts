@@ -22,11 +22,20 @@ export type IntakeSignal = {
   value: string;
 };
 
+export type DimensionKey =
+  | "tecnologia"
+  | "negocios"
+  | "criatividade"
+  | "conhecimento"
+  | "pessoas"
+  | "expressao";
+
 export type IntakeDraft = {
   title: string;
   objective: string;
   expectedResult: string;
   vision: string;
+  dimension: DimensionKey;
   milestones: DraftMilestone[];
   signals: IntakeSignal[];
 };
@@ -160,18 +169,27 @@ function extractAudience(text: string): string | null {
   return match[1].trim();
 }
 
-function detectDimension(text: string): string {
+function detectDimension(text: string): DimensionKey {
   const t = text.toLowerCase();
-  if (/(sentir|perceber|emo[çc][ãa]o|mentalidade|autoconhecimento|eu |minha vida|sobrecarga|equil[íi]brio)/.test(t)) {
-    return "EU — Perceber → Elaborar → Integrar";
+  if (/(c[óo]digo|app|produto|sistema|plataforma|software|ferramenta|automa[çc][ãa]o|api|backend|frontend|tech|tecnologia|ia|intelig[êe]ncia)/.test(t)) {
+    return "tecnologia";
   }
-  if (/(neg[óo]cio|empresa|cliente|venda|marketing|processo|execu[çc][ãa]o|produto|escala|dire[çc][ãa]o|estrutura)/.test(t)) {
-    return "FAZER — Direção → Estrutura → Execução";
+  if (/(vender|venda|funil|prospec[çc][ãa]o|cliente|lead|receita|faturar|neg[óo]cio|empresa|oferta)/.test(t)) {
+    return "negocios";
   }
-  if (/(comunidade|pessoas|contribuir|conectar|compartilhar|impacto|valor|mundo|ecossistema)/.test(t)) {
-    return "MUNDO — Conectar → Criar → Contribuir";
+  if (/(conte[úu]do|post|design|criar|criativ|inovar|ideia|campanha|copy|headline)/.test(t)) {
+    return "criatividade";
   }
-  return "EU — Perceber → Elaborar → Integrar";
+  if (/(aprender|conhecimento|estudar|ler|refer[êe]ncia|insight|mem[óo]ria|documentar)/.test(t)) {
+    return "conhecimento";
+  }
+  if (/(comunidade|pessoas|equipe|time|relacionamento|conectar|parceria|colaborador)/.test(t)) {
+    return "pessoas";
+  }
+  if (/(comunicar|express[ãa]o|posicionamento|marca|mensagem|falar|v[íi]deo|podcast|voz)/.test(t)) {
+    return "expressao";
+  }
+  return "negocios";
 }
 
 export const draftFromIntent: IntakeEngine = (rawIntent) => {
@@ -188,11 +206,17 @@ export const draftFromIntent: IntakeEngine = (rawIntent) => {
     concreteResult ?? (deadline ? `Primeiro resultado observável em ${deadline}` : "Primeiro resultado observável em 30 dias");
 
   const dimension = detectDimension(intent);
+  const triad =
+    /(sentir|perceber|emo[çc][ãa]o|mentalidade|autoconhecimento|eu |minha vida|sobrecarga|equil[íi]brio)/.test(intent.toLowerCase())
+      ? "EU — Perceber → Elaborar → Integrar"
+      : /(comunidade|pessoas|contribuir|conectar|compartilhar|impacto|valor|mundo|ecossistema)/.test(intent.toLowerCase())
+        ? "MUNDO — Conectar → Criar → Contribuir"
+        : "FAZER — Direção → Estrutura → Execução";
   const signals: IntakeSignal[] = [
     { kind: "objetivo", value: objective.length > 120 ? `${objective.slice(0, 117)}…` : objective },
     { kind: "resultado", value: expectedResult },
     { kind: "tipo", value: templateKey },
-    { kind: "dimensão", value: dimension },
+    { kind: "dimensão", value: triad },
   ];
   if (deadline) signals.push({ kind: "prazo", value: deadline });
   if (audience) signals.push({ kind: "público", value: audience });
@@ -202,6 +226,7 @@ export const draftFromIntent: IntakeEngine = (rawIntent) => {
     objective,
     expectedResult,
     vision: audience ? `Ser a melhor escolha para ${audience}.` : "",
+    dimension,
     signals,
     milestones: template.map((milestone) => ({
       title: milestone.title,
