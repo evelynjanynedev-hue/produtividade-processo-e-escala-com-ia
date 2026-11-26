@@ -40,18 +40,26 @@ export type InitiativeSummary = {
   reality: RealityInput;
 };
 
+/**
+ * A coluna externa precisa ser qualificada explicitamente.
+ * Dentro do subselect, `${initiatives.id}` vira apenas `"id"` e o Postgres
+ * resolve para a coluna homônima da tabela interna (ex.: `tasks.id`),
+ * zerando todas as contagens.
+ */
+const initiativeIdColumn = sql.raw('"initiatives"."id"');
+
 const countsSelect = {
-  tasksTotal: sql<number>`(select count(*) from tasks t where t.initiative_id = ${initiatives.id})`,
-  tasksDone: sql<number>`(select count(*) from tasks t where t.initiative_id = ${initiatives.id} and t.status = 'feita')`,
-  tasksBlocked: sql<number>`(select count(*) from tasks t where t.initiative_id = ${initiatives.id} and t.status = 'bloqueada')`,
-  evidencesCount: sql<number>`(select count(*) from evidences e where e.initiative_id = ${initiatives.id})`,
-  resultsCount: sql<number>`(select count(*) from results r where r.initiative_id = ${initiatives.id})`,
-  learningsProven: sql<number>`(select count(*) from learnings l where l.initiative_id = ${initiatives.id} and l.status = 'provado')`,
-  milestonesCount: sql<number>`(select count(*) from milestones m where m.initiative_id = ${initiatives.id})`,
-  validatedProcesses: sql<number>`(select count(*) from processes p where p.initiative_id = ${initiatives.id} and p.status in ('validado','escalando'))`,
+  tasksTotal: sql<number>`(select count(*) from tasks t where t.initiative_id = ${initiativeIdColumn})`,
+  tasksDone: sql<number>`(select count(*) from tasks t where t.initiative_id = ${initiativeIdColumn} and t.status = 'feita')`,
+  tasksBlocked: sql<number>`(select count(*) from tasks t where t.initiative_id = ${initiativeIdColumn} and t.status = 'bloqueada')`,
+  evidencesCount: sql<number>`(select count(*) from evidences e where e.initiative_id = ${initiativeIdColumn})`,
+  resultsCount: sql<number>`(select count(*) from results r where r.initiative_id = ${initiativeIdColumn})`,
+  learningsProven: sql<number>`(select count(*) from learnings l where l.initiative_id = ${initiativeIdColumn} and l.status = 'provado')`,
+  milestonesCount: sql<number>`(select count(*) from milestones m where m.initiative_id = ${initiativeIdColumn})`,
+  validatedProcesses: sql<number>`(select count(*) from processes p where p.initiative_id = ${initiativeIdColumn} and p.status in ('validado','escalando'))`,
   nextTask: sql<
     string | null
-  >`(select t.title from tasks t where t.initiative_id = ${initiatives.id} and t.status in ('a_fazer','fazendo') order by t.position asc limit 1)`,
+  >`(select t.title from tasks t where t.initiative_id = ${initiativeIdColumn} and t.status in ('a_fazer','fazendo') order by t.position asc limit 1)`,
 };
 
 export async function listInitiatives(workspaceId: string): Promise<InitiativeSummary[]> {
